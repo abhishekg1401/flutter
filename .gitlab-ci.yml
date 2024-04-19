@@ -1,4 +1,4 @@
-image: cirrusci/flutter:3.3.4
+image: cirrusci/flutter:3.19.6
 
 stages:
   - build
