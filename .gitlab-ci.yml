@@ -1,0 +1,33 @@
+image: cirrusci/flutter:2.10.0
+
+stages:
+  - build
+  - test
+
+before_script:
+  - flutter doctor
+  - flutter config --enable-web
+
+build:
+  stage: build
+  script:
+    # Build APK for Android
+    - flutter build apk
+    # Build IPA for iOS (might require a macOS environment to build for iOS)
+    - flutter build ios --release --no-codesign
+  artifacts:
+    paths:
+      - build/
+
+test:
+  stage: test
+  script:
+    # Run lint checks
+    - flutter analyze
+    # Execute unit and widget tests
+    - flutter test
+    # Generate code coverage report
+    - flutter test --coverage
+    # Install codecov and upload code coverage report
+    - curl -s https://codecov.io/bash | bash
+  coverage: /All files[^|]*\|([^%]+)/
