@@ -7,11 +7,12 @@ stages:
 before_script:
   - flutter doctor
   - flutter config --enable-web
+  - flutter pub get
+  - flutter clean
 
 build:
   stage: build
   script:
-    - flutter pub get
     # Build APK for Android
     - flutter build apk
     # Build IPA for iOS (might require a macOS environment to build for iOS)
