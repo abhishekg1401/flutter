@@ -10,6 +10,8 @@ before_script:
 
 build:
   stage: build
+  tags:
+    - flutter
   script:
     - flutter pub get
     # Build APK for Android
