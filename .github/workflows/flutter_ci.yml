@@ -2,47 +2,116 @@ name: Flutter CI
 
 on:
   pull_request:
-    branches: [main]
+    branches:
+      - main
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
-  build:
-    name: Build and Test
+  build_and_test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup Flutter
+      - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.x'
 
-      - name: Get dependencies
+      - name: Install dependencies
         run: flutter pub get
 
       - name: Run lint checks
         run: flutter analyze
 
-      - name: Run unit and widget tests
-        run: flutter test
-
-#      - name: Build Android APK
-#        if: runner.os == 'Linux'
-#        run: flutter build apk
-
-#      - name: Build iOS IPA
-#       if: runner.os == 'macOS'
-#        run: flutter build ios --release --no-codesign
-
-    # Run tests
-#      - name: Run tests
+#      - name: Run unit and widget tests
 #        run: flutter test --coverage
 
-#      - name: Upload coverage reports to Codecov
-#        uses: codecov/codecov-action@v4.0.1
+      - name: Build Android APK
+        run: flutter build apk --release
+
+      - name: Build iOS IPA
+        run: flutter build ios --release --no-codesign
+
+      - name: Upload coverage report to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  deploy_to_firebase:
+    needs: build_and_test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run lint checks
+        run: flutter analyze
+
+#      - name: Run unit and widget tests
+#        run: flutter test --coverage
+
+      - name: Build Android APK
+        run: flutter build apk --release
+
+      - name: Build iOS IPA
+        run: flutter build ios --release --no-codesign
+
+      - name: Deploy to Firebase App Distribution (Staging)
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID_STAGING }}
+          token: ${{ secrets.FIREBASE_TOKEN_STAGING }}
+          groups: 'testers'
+          file: build/app/outputs/flutter-apk/app-release.apk
+          releaseNotes: 'Automated staging build'
+
+#  deploy_production:
+#    needs: build_and_test
+#    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production'
+#    runs-on: ubuntu-latest
+
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v2
+
+#      - name: Set up Flutter
+#        uses: subosito/flutter-action@v2
 #        with:
-#          token: ${{ secrets.CODECOV_TOKEN }}
-#          slug: abhishekg1401/flutter
+#          flutter-version: '2.x'
+
+#      - name: Install dependencies
+#        run: flutter pub get
+
+#      - name: Run lint checks
+#        run: flutter analyze
+
+#      - name: Run unit and widget tests
+#        run: flutter test --coverage
+
+#      - name: Build Android APK
+#        run: flutter build apk --release
+
+#      - name: Build iOS IPA
+#        run: flutter build ios --release --no-codesign
+
+#      - name: Deploy to Firebase App Distribution (Production)
+#        uses: wzieba/Firebase-Distribution-Github-Action@v1
+#        with:
+#          appId: ${{ secrets.FIREBASE_APP_ID_PRODUCTION }}
+#          token: ${{ secrets.FIREBASE_TOKEN_PRODUCTION }}
+#          groups: 'testers'
+#          file: build/app/outputs/flutter-apk/app-release.apk
+#          releaseNotes: 'Automated production build'

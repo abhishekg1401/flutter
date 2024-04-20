@@ -4,6 +4,20 @@ void main() {
   runApp(const LoginDrawerApp());
 }
 
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: LoginPage(),
+    );
+  }
+}
+
 class LoginDrawerApp extends StatelessWidget {
   const LoginDrawerApp({Key? key}) : super(key: key);
 
