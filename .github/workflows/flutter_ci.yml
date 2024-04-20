@@ -27,6 +27,12 @@ jobs:
       - name: Run lint checks
         run: flutter analyze
 
+      - name: Flutter Clean
+        run: flutter clean
+        
+      - name: Pub get
+        run: flutter pub get
+
 #      - name: Run unit and widget tests
 #        run: flutter test --coverage
 
