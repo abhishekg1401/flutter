@@ -26,23 +26,23 @@ jobs:
       - name: Run lint checks
         run: flutter analyze
 
- #     - name: Run unit and widget tests
- #       run: flutter test
+      - name: Run unit and widget tests
+        run: flutter test
 
-      - name: Build Android APK
-        if: runner.os == 'Linux'
-        run: flutter build apk
+#      - name: Build Android APK
+#        if: runner.os == 'Linux'
+#        run: flutter build apk
 
-      - name: Build iOS IPA
-        if: runner.os == 'macOS'
-        run: flutter build ios --release --no-codesign
+#      - name: Build iOS IPA
+#       if: runner.os == 'macOS'
+#        run: flutter build ios --release --no-codesign
 
     # Run tests
-      - name: Run tests
-        run: flutter test --coverage
+#      - name: Run tests
+#        run: flutter test --coverage
 
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.0.1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          slug: abhishekg1401/flutter
+#      - name: Upload coverage reports to Codecov
+#        uses: codecov/codecov-action@v4.0.1
+#        with:
+#          token: ${{ secrets.CODECOV_TOKEN }}
+#          slug: abhishekg1401/flutter
