@@ -14,7 +14,6 @@ build:
     - flutter pub get
     # Build APK for Android
     - flutter build apk
-    
     # Build IPA for iOS (might require a macOS environment to build for iOS)
     - flutter build ios --release --no-codesign
   artifacts:
