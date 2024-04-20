@@ -10,7 +10,6 @@ before_script:
 
 build:
   stage: build
-
   script:
     - flutter pub get
     # Build APK for Android
@@ -20,8 +19,7 @@ build:
   artifacts:
     paths:
       - build/
-  tags:
-    - flutter
+
 
 test:
   stage: test
